@@ -21,3 +21,7 @@ profiles/_state.json
 
 # Claude Code local config
 .claude/
+
+# ad-hoc diagnostic scratch
+tmp_*
+icon_variants/
