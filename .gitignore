@@ -9,6 +9,7 @@ build/
 dist/
 *.spec
 installer/Output/
+installer/vendor/
 
 # user-mutable runtime state (active-profile pointer)
 profiles/_state.json
