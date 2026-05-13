@@ -4,6 +4,12 @@ __pycache__/
 *.pyo
 .pytest_cache/
 
+# PyInstaller build artifacts
+build/
+dist/
+*.spec
+installer/Output/
+
 # user-mutable runtime state (active-profile pointer)
 profiles/_state.json
 

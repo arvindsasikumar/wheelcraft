@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import os
 import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -15,9 +16,15 @@ from wheelmap.profile import Profile
 from wheelmap.store import ProfileStore, safe_name
 
 
-HERE = Path(__file__).parent
-STATIC = HERE / "static"
-PROFILES = HERE / "profiles"
+if getattr(sys, "frozen", False):
+    # PyInstaller bundle: static lives in the bundle, profiles in user appdata.
+    BUNDLE_DIR = Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
+    STATIC = BUNDLE_DIR / "static"
+    PROFILES = Path(os.environ.get("APPDATA", str(Path.home()))) / "wheelmap" / "profiles"
+else:
+    HERE = Path(__file__).parent
+    STATIC = HERE / "static"
+    PROFILES = HERE / "profiles"
 
 store = ProfileStore(PROFILES)
 _active_name = store.get_active_name()
