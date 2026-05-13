@@ -1,9 +1,22 @@
 """Single entry point. Starts the wheel pipeline + the FastAPI server."""
 
-import asyncio
-import logging
 import os
 import sys
+
+# In PyInstaller --windowed builds, Windows doesn't allocate a console, so
+# sys.stdin/stdout/stderr are None. Libraries that introspect them (notably
+# uvicorn's default log formatter calling .isatty()) crash. Replace them with
+# devnull file objects BEFORE any such import.
+if getattr(sys, "frozen", False):
+    if sys.stdout is None:
+        sys.stdout = open(os.devnull, "w")
+    if sys.stderr is None:
+        sys.stderr = open(os.devnull, "w")
+    if sys.stdin is None:
+        sys.stdin = open(os.devnull, "r")
+
+import asyncio
+import logging
 import threading
 import webbrowser
 from contextlib import asynccontextmanager
