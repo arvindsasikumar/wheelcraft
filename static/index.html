@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>wheelcraft</title>
+<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
 <link rel="stylesheet" href="/static/app.css" />
 </head>
 <body>
@@ -83,6 +84,7 @@
 
   <section class="panel editor" id="editor-steering" data-axis="steering" data-kind="bipolar">
     <h2>steering</h2>
+    <p class="panel-hint">Tune how turning your wheel translates into in-game steering. The line below shows the mapping; the dot is your current position.</p>
     <svg class="curve" viewBox="0 0 120 100" preserveAspectRatio="none">
       <line x1="60" y1="0" x2="60" y2="100" class="axis-line" />
       <line x1="0" y1="50" x2="120" y2="50" class="axis-line" />
@@ -94,6 +96,7 @@
 
   <section class="panel editor" id="editor-brake" data-axis="brake" data-kind="unipolar">
     <h2>brake (LT)</h2>
+    <p class="panel-hint">Tune your brake pedal. Left side of the graph = pedal up, right side = fully pressed.</p>
     <svg class="curve" viewBox="0 0 120 100" preserveAspectRatio="none">
       <line x1="0" y1="100" x2="120" y2="100" class="axis-line" />
       <line x1="0" y1="0" x2="0" y2="100" class="axis-line" />
@@ -105,6 +108,7 @@
 
   <section class="panel editor" id="editor-throttle" data-axis="throttle" data-kind="unipolar">
     <h2>throttle (RT)</h2>
+    <p class="panel-hint">Tune your throttle pedal. Left side of the graph = pedal up, right side = fully pressed.</p>
     <svg class="curve" viewBox="0 0 120 100" preserveAspectRatio="none">
       <line x1="0" y1="100" x2="120" y2="100" class="axis-line" />
       <line x1="0" y1="0" x2="0" y2="100" class="axis-line" />
@@ -117,10 +121,9 @@
   <section class="panel remap">
     <h2>button remap</h2>
     <p class="hint">
-      maps each physical XInput button to a virtual one. <b>caveat:</b> if two
-      physical controls on your wheel share the same XInput bit at the hardware
-      level (e.g. paddles + sequential shifter both wired to LB/RB), software can't
-      tell them apart — they'll remap together.
+      Change what each wheel button does in-game. Rows highlight when you press the button so you can spot which is which.
+      <b>Heads up:</b> if two wheel buttons share the same internal slot (cheap wheels often wire paddles and the
+      shifter to the same button), the software can't tell them apart and they'll always remap together.
     </p>
     <div id="remap-grid" class="remap-grid"></div>
     <button id="btn-remap-reset">reset remap to identity</button>

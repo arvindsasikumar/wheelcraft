@@ -9,11 +9,36 @@ const qs = (sel, root = document) => root.querySelector(sel);
 const WHEEL_VIS_MAX_DEG = 90;
 
 const AXIS_FIELDS = [
-  { key: "inner_deadzone_pct",   label: "input deadzone (ignore tiny inputs)",          min: 0,   max: 99,  step: 1 },
-  { key: "outer_saturation_pct", label: "input saturation (treat near-max as max)",     min: 1,   max: 100, step: 1 },
-  { key: "output_min_pct",       label: "output floor (jump past game's deadzone)",     min: 0,   max: 100, step: 1 },
-  { key: "output_max_pct",       label: "output ceiling (cap virtual output)",          min: 0,   max: 100, step: 1 },
-  { key: "curve_power",          label: "curve power (1=linear, >1=less center sens.)", min: 0.1, max: 4.0, step: 0.05 },
+  {
+    key: "inner_deadzone_pct",
+    label: "Ignore tiny input near rest",
+    desc: "Raise this if your wheel jitters at center or your pedal doesn't quite return to zero.",
+    min: 0, max: 99, step: 1,
+  },
+  {
+    key: "outer_saturation_pct",
+    label: "Reach maximum sooner",
+    desc: "Lower this if you can't comfortably turn the wheel to full lock or push the pedal all the way down.",
+    min: 1, max: 100, step: 1,
+  },
+  {
+    key: "output_min_pct",
+    label: "Boost small inputs",
+    desc: "Raise this if the game ignores small wheel turns or light pedal taps. Skips past the game's built-in deadzone.",
+    min: 0, max: 100, step: 1,
+  },
+  {
+    key: "output_max_pct",
+    label: "Cap maximum output",
+    desc: "Lower this to limit the strongest effect the game can receive. 100 = full effect; 50 = half.",
+    min: 0, max: 100, step: 1,
+  },
+  {
+    key: "curve_power",
+    label: "Sensitivity curve",
+    desc: "1 = direct. Above 1 = gentler near rest, sharper at extremes (calmer). Below 1 = touchier near rest.",
+    min: 0.1, max: 4.0, step: 0.05,
+  },
 ];
 
 const state = {
@@ -72,17 +97,21 @@ function pushActive() {
 
 function buildAxisControls(panel) {
   const axis = panel.dataset.axis;
-  const kind = panel.dataset.kind;
   const controls = qs(".controls", panel);
   controls.innerHTML = "";
 
   for (const field of AXIS_FIELDS) {
-    const row = document.createElement("div");
-    row.className = "row";
+    const block = document.createElement("div");
+    block.className = "field";
 
     const label = document.createElement("label");
+    label.className = "field-label";
     label.textContent = field.label;
     label.setAttribute("for", `${axis}-${field.key}`);
+
+    const desc = document.createElement("div");
+    desc.className = "field-desc";
+    desc.textContent = field.desc;
 
     const slider = document.createElement("input");
     slider.type = "range";
@@ -102,14 +131,15 @@ function buildAxisControls(panel) {
     number.dataset.axis = axis;
     number.dataset.field = field.key;
 
-    const sliderCell = document.createElement("div");
-    sliderCell.style.minWidth = 0;
-    sliderCell.appendChild(slider);
+    const row = document.createElement("div");
+    row.className = "field-row";
+    row.appendChild(slider);
+    row.appendChild(number);
 
-    controls.appendChild(label);
-    controls.appendChild(sliderCell);
-    controls.appendChild(document.createElement("div"));
-    controls.appendChild(number);
+    block.appendChild(label);
+    block.appendChild(desc);
+    block.appendChild(row);
+    controls.appendChild(block);
 
     const sync = (src) => {
       const v = parseFloat(src.value);
@@ -134,7 +164,7 @@ function buildAxisControls(panel) {
     pushActive();
   });
   invertWrap.appendChild(invert);
-  invertWrap.appendChild(document.createTextNode("invert direction"));
+  invertWrap.appendChild(document.createTextNode("Reverse direction"));
   controls.appendChild(invertWrap);
 }
 

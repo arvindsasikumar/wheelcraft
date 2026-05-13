@@ -29,6 +29,7 @@ echo Running PyInstaller...
     --name wheelmap ^
     --onedir ^
     --windowed ^
+    --icon installer\wheelcraft.ico ^
     --add-data "static;static" ^
     --collect-all vgamepad ^
     %EXTRA% ^
