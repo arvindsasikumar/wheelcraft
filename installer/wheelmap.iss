@@ -14,7 +14,7 @@
 ;   - Allows clean uninstall
 
 #define MyAppName "wheelcraft"
-#define MyAppVersion "0.1.0"
+#define MyAppVersion "0.1.1"
 #define MyAppPublisher "Arvind"
 #define MyAppExeName "wheelmap.exe"
 
