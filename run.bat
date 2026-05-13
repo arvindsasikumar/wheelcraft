@@ -1,6 +1,6 @@
 @echo off
 setlocal
-title wheelmap
+title wheelcraft
 cd /d "%~dp0"
 
 if not exist ".venv\Scripts\python.exe" (

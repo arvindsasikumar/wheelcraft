@@ -1,14 +1,14 @@
-; wheelmap installer (Inno Setup script)
+; wheelcraft installer (Inno Setup script)
 ;
 ; Usage:
-;   1. Run build.bat first to produce dist\wheelmap\
+;   1. Run build.bat first to produce dist\wheelcraft\
 ;   2. Download ViGEmBus installer to installer\vendor\ViGEmBus.exe
 ;      (https://github.com/nefarius/ViGEmBus/releases/download/v1.22.0/ViGEmBus_1.22.0_x64_x86_arm64.exe)
 ;   3. Open this .iss in Inno Setup and click Compile
-;   4. Output: installer\Output\wheelmap-setup.exe
+;   4. Output: installer\Output\wheelcraft-setup.exe
 ;
 ; What it does:
-;   - Installs wheelmap into Program Files\wheelmap\
+;   - Installs wheelcraft into Program Files\wheelcraft\
 ;   - Runs the bundled ViGEmBus installer if the driver isn't already present
 ;   - Creates Start Menu and (optional) Desktop shortcuts
 ;   - Allows clean uninstall
@@ -16,7 +16,7 @@
 #define MyAppName "wheelcraft"
 #define MyAppVersion "0.1.4"
 #define MyAppPublisher "Arvind"
-#define MyAppExeName "wheelmap.exe"
+#define MyAppExeName "wheelcraft.exe"
 
 [Setup]
 AppId={{C7E1B5F8-9A3E-4D2E-8C5B-7F4A6D8B1E22}
@@ -44,7 +44,7 @@ Name: "desktopicon"; Description: "Create a &desktop shortcut"; GroupDescription
 
 [Files]
 ; Bundle everything PyInstaller produced
-Source: "..\dist\wheelmap\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\dist\wheelcraft\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; The ViGEmBus installer (download to installer\vendor\ before compiling)
 Source: "vendor\ViGEmBus.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: NeedsViGEmBus
 

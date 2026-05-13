@@ -49,9 +49,9 @@ Write-Host "GH:   $Gh"
 Write-Host ""
 
 # Bump version in installer .iss
-(Get-Content installer\wheelmap.iss) -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$Version`"" | Set-Content installer\wheelmap.iss
+(Get-Content installer\wheelcraft.iss) -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$Version`"" | Set-Content installer\wheelcraft.iss
 
-# Build wheelmap.exe bundle
+# Build wheelcraft.exe bundle
 & cmd.exe /c ".\build.bat"
 if ($LASTEXITCODE -ne 0) { throw "Build failed." }
 
@@ -63,13 +63,13 @@ if (-not (Test-Path "installer\vendor\ViGEmBus.exe")) {
 }
 
 # Compile installer
-& $Iscc "installer\wheelmap.iss"
+& $Iscc "installer\wheelcraft.iss"
 if ($LASTEXITCODE -ne 0) { throw "Installer compile failed." }
 
 # Commit version bump if .iss actually changed
-git diff --quiet installer\wheelmap.iss
+git diff --quiet installer\wheelcraft.iss
 if ($LASTEXITCODE -ne 0) {
-    git add installer\wheelmap.iss
+    git add installer\wheelcraft.iss
     git commit -m "Bump version to $Version"
     if ($LASTEXITCODE -ne 0) { throw "Version-bump commit failed." }
 }

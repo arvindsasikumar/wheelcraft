@@ -54,10 +54,10 @@ the transformation math in JS (`static/app.js`) for live curve preview.
 - `static/` — `index.html`, `app.js`, `app.css`. Single page.
 - `profiles/` — JSON profile files. Only `default.json` is in git;
   `_state.json` is gitignored runtime state.
-- `installer/wheelmap.iss` — Inno Setup script for the Windows installer.
+- `installer/wheelcraft.iss` — Inno Setup script for the Windows installer.
 - `installer/fetch_vendor.bat` — downloads ViGEmBus v1.22.0 for bundling.
 - `installer/vendor/` — gitignored; holds the downloaded ViGEmBus.exe.
-- `build.bat` — runs PyInstaller. Outputs `dist/wheelmap/wheelmap.exe`.
+- `build.bat` — runs PyInstaller. Outputs `dist/wheelcraft/wheelcraft.exe`.
 - `run.bat` — dev launcher: auto-creates `.venv` on first run, starts
   `server.py`, opens the browser.
 - `release.bat` — `release.bat <version>` does the full release pipeline:
@@ -68,8 +68,8 @@ the transformation math in JS (`static/app.js`) for live curve preview.
 | Task | Command |
 |---|---|
 | Run in dev mode | `run.bat` |
-| Build standalone exe | `build.bat` → `dist/wheelmap/wheelmap.exe` |
-| Compile installer | `installer/fetch_vendor.bat` then ISCC on `installer/wheelmap.iss` |
+| Build standalone exe | `build.bat` → `dist/wheelcraft/wheelcraft.exe` |
+| Compile installer | `installer/fetch_vendor.bat` then ISCC on `installer/wheelcraft.iss` |
 | Full release | `release.bat 0.x.y` |
 | Reinstall deps | `.venv\Scripts\python.exe -m pip install -r requirements.txt` |
 

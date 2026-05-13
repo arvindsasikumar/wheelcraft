@@ -103,9 +103,9 @@ the server and opens the browser.
 ### Building the installer locally
 
 ```cmd
-build.bat                         REM PyInstaller bundle in dist\wheelmap\
+build.bat                         REM PyInstaller bundle in dist\wheelcraft\
 installer\fetch_vendor.bat        REM downloads ViGEmBus into installer\vendor\
-"%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" installer\wheelmap.iss
+"%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" installer\wheelcraft.iss
 REM Output: installer\Output\wheelcraft-setup.exe
 ```
 
