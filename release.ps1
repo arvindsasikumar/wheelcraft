@@ -37,8 +37,10 @@ if ($LASTEXITCODE -ne 0) { throw "Uncommitted changes. Commit or stash first." }
 git diff --staged --quiet
 if ($LASTEXITCODE -ne 0) { throw "Staged changes. Commit them first." }
 
-git rev-parse $Tag 2>$null | Out-Null
-if ($LASTEXITCODE -eq 0) { throw "Tag $Tag already exists." }
+# Check tag doesn't already exist. git tag -l prints the matching tag name
+# (or nothing) and never errors, so it's safer than git rev-parse for this.
+$existing = git tag -l $Tag
+if ($existing) { throw "Tag $Tag already exists." }
 
 Write-Host ""
 Write-Host "=== Releasing wheelcraft $Tag ==="
@@ -79,10 +81,14 @@ if ($LASTEXITCODE -ne 0) { throw "Push failed." }
 git push origin $Tag
 if ($LASTEXITCODE -ne 0) { throw "Tag push failed." }
 
-# Generate release notes from commits since the previous tag
+# Generate release notes from commits since the previous tag.
+# git describe writes to stderr when no tags exist; isolate in a sub-scope.
 $prevTag = $null
-$prev = git describe --tags --abbrev=0 "$Tag^" 2>$null
-if ($LASTEXITCODE -eq 0 -and $prev) { $prevTag = $prev.Trim() }
+& {
+    $ErrorActionPreference = "Continue"
+    $prev = git describe --tags --abbrev=0 "$Tag^" 2>$null
+    if ($LASTEXITCODE -eq 0 -and $prev) { $script:prevTag = $prev.Trim() }
+}
 
 if ($prevTag) {
     $log = (git log --pretty=format:"- %s" "$prevTag..$Tag") -join "`n"
