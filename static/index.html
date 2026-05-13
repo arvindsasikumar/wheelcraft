@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>wheelmap</title>
+<link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+<header>
+  <div class="title">
+    <h1>wheelmap</h1>
+    <span id="status" class="status">connecting…</span>
+  </div>
+  <div class="profile-bar">
+    <label>profile:</label>
+    <select id="profile-select"></select>
+    <button id="btn-save" title="Save current edits to this profile">save</button>
+    <button id="btn-new" title="Create a new profile from current edits">+ new</button>
+    <button id="btn-delete" title="Delete this profile">delete</button>
+    <span class="meta">
+      real slot <b id="real-slot">-</b>
+      · virtual slot <b id="virtual-slot">-</b>
+      · loop <b id="hz">0</b> Hz
+    </span>
+  </div>
+</header>
+
+<main>
+  <section class="panel viz">
+    <h2>live input</h2>
+    <div class="wheel-and-pedals">
+      <svg id="wheel-svg" viewBox="-110 -110 220 220" class="wheel">
+        <circle cx="0" cy="0" r="100" class="rim" />
+        <circle cx="0" cy="0" r="92" class="rim-inner" />
+        <g id="wheel-rotor">
+          <rect x="-10" y="-95" width="20" height="20" class="marker" />
+          <rect x="-90" y="-6" width="180" height="12" class="spoke" />
+          <rect x="-6" y="-90" width="12" height="180" class="spoke" />
+          <circle cx="0" cy="0" r="30" class="hub" />
+        </g>
+        <g id="wheel-rotor-virtual" class="virtual-overlay">
+          <rect x="-6" y="-95" width="12" height="20" class="marker-virtual" />
+        </g>
+      </svg>
+      <div class="pedals">
+        <div class="pedal">
+          <label>brake (LT)</label>
+          <div class="bar"><div class="fill brake" id="lt-fill"></div></div>
+          <div class="bar virtual"><div class="fill brake" id="vlt-fill"></div></div>
+          <span class="val"><span id="lt-val">0</span> → <span id="vlt-val">0</span></span>
+        </div>
+        <div class="pedal">
+          <label>throttle (RT)</label>
+          <div class="bar"><div class="fill throttle" id="rt-fill"></div></div>
+          <div class="bar virtual"><div class="fill throttle" id="vrt-fill"></div></div>
+          <span class="val"><span id="rt-val">0</span> → <span id="vrt-val">0</span></span>
+        </div>
+      </div>
+    </div>
+
+    <h3>physical buttons (pressed)</h3>
+    <div id="buttons-real" class="buttons"></div>
+    <h3>virtual buttons (after remap)</h3>
+    <div id="buttons-virtual" class="buttons"></div>
+  </section>
+
+  <section class="panel raw">
+    <h2>raw values</h2>
+    <table>
+      <thead><tr><th></th><th>real</th><th>→ virtual</th></tr></thead>
+      <tbody>
+        <tr><th>steering (LX)</th><td id="real-lx">-</td><td id="virt-lx">-</td></tr>
+        <tr><th>brake (LT)</th>   <td id="real-lt">-</td><td id="virt-lt">-</td></tr>
+        <tr><th>throttle (RT)</th><td id="real-rt">-</td><td id="virt-rt">-</td></tr>
+        <tr><th>LY</th>            <td id="real-ly">-</td><td id="virt-ly">-</td></tr>
+        <tr><th>RX</th>            <td id="real-rx">-</td><td id="virt-rx">-</td></tr>
+        <tr><th>RY</th>            <td id="real-ry">-</td><td id="virt-ry">-</td></tr>
+        <tr><th>buttons</th>       <td id="real-btns">-</td><td id="virt-btns">-</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel editor" id="editor-steering" data-axis="steering" data-kind="bipolar">
+    <h2>steering</h2>
+    <svg class="curve" viewBox="0 0 120 100" preserveAspectRatio="none">
+      <line x1="60" y1="0" x2="60" y2="100" class="axis-line" />
+      <line x1="0" y1="50" x2="120" y2="50" class="axis-line" />
+      <path id="curve-steering" d="" class="curve-line" />
+      <circle id="dot-steering" cx="60" cy="50" r="3" class="dot" />
+    </svg>
+    <div class="controls"></div>
+  </section>
+
+  <section class="panel editor" id="editor-brake" data-axis="brake" data-kind="unipolar">
+    <h2>brake (LT)</h2>
+    <svg class="curve" viewBox="0 0 120 100" preserveAspectRatio="none">
+      <line x1="0" y1="100" x2="120" y2="100" class="axis-line" />
+      <line x1="0" y1="0" x2="0" y2="100" class="axis-line" />
+      <path id="curve-brake" d="" class="curve-line" />
+      <circle id="dot-brake" cx="0" cy="100" r="3" class="dot" />
+    </svg>
+    <div class="controls"></div>
+  </section>
+
+  <section class="panel editor" id="editor-throttle" data-axis="throttle" data-kind="unipolar">
+    <h2>throttle (RT)</h2>
+    <svg class="curve" viewBox="0 0 120 100" preserveAspectRatio="none">
+      <line x1="0" y1="100" x2="120" y2="100" class="axis-line" />
+      <line x1="0" y1="0" x2="0" y2="100" class="axis-line" />
+      <path id="curve-throttle" d="" class="curve-line" />
+      <circle id="dot-throttle" cx="0" cy="100" r="3" class="dot" />
+    </svg>
+    <div class="controls"></div>
+  </section>
+
+  <section class="panel remap">
+    <h2>button remap</h2>
+    <p class="hint">
+      maps each physical XInput button to a virtual one. <b>caveat:</b> if two
+      physical controls on your wheel share the same XInput bit at the hardware
+      level (e.g. paddles + sequential shifter both wired to LB/RB), software can't
+      tell them apart — they'll remap together.
+    </p>
+    <div id="remap-grid" class="remap-grid"></div>
+    <button id="btn-remap-reset">reset remap to identity</button>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

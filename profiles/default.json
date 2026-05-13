@@ -1,0 +1,43 @@
+{
+  "name": "default",
+  "steering": {
+    "inner_deadzone_pct": 0.0,
+    "outer_saturation_pct": 100.0,
+    "output_min_pct": 0.0,
+    "output_max_pct": 100.0,
+    "curve_power": 1.0,
+    "invert": false
+  },
+  "brake": {
+    "inner_deadzone_pct": 0.0,
+    "outer_saturation_pct": 100.0,
+    "output_min_pct": 0.0,
+    "output_max_pct": 100.0,
+    "curve_power": 1.0,
+    "invert": false
+  },
+  "throttle": {
+    "inner_deadzone_pct": 0.0,
+    "outer_saturation_pct": 100.0,
+    "output_min_pct": 0.0,
+    "output_max_pct": 100.0,
+    "curve_power": 1.0,
+    "invert": false
+  },
+  "button_remap": {
+    "DPAD_UP": "DPAD_UP",
+    "DPAD_DOWN": "DPAD_DOWN",
+    "DPAD_LEFT": "DPAD_LEFT",
+    "DPAD_RIGHT": "DPAD_RIGHT",
+    "START": "START",
+    "BACK": "BACK",
+    "LSTICK": "LSTICK",
+    "RSTICK": "RSTICK",
+    "LB": "LB",
+    "RB": "RB",
+    "A": "A",
+    "B": "B",
+    "X": "X",
+    "Y": "Y"
+  }
+}

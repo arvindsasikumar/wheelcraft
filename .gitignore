@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# user-mutable runtime state (active-profile pointer)
+profiles/_state.json
+
+# editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# Claude Code local config
+.claude/
