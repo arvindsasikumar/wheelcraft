@@ -20,7 +20,7 @@ if getattr(sys, "frozen", False):
     # PyInstaller bundle: static lives in the bundle, profiles in user appdata.
     BUNDLE_DIR = Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
     STATIC = BUNDLE_DIR / "static"
-    PROFILES = Path(os.environ.get("APPDATA", str(Path.home()))) / "wheelmap" / "profiles"
+    PROFILES = Path(os.environ.get("APPDATA", str(Path.home()))) / "wheelcraft" / "profiles"
 else:
     HERE = Path(__file__).parent
     STATIC = HERE / "static"

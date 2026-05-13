@@ -13,7 +13,7 @@
 ;   - Creates Start Menu and (optional) Desktop shortcuts
 ;   - Allows clean uninstall
 
-#define MyAppName "wheelmap"
+#define MyAppName "wheelcraft"
 #define MyAppVersion "0.1.0"
 #define MyAppPublisher "Arvind"
 #define MyAppExeName "wheelmap.exe"

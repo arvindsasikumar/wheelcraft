@@ -1,4 +1,4 @@
-# wheelmap
+# wheelcraft
 
 A Windows tool that reads a racing wheel via XInput, applies per-profile
 transformations (deadzones, output floor/ceiling, curve power, button remap),
@@ -17,8 +17,8 @@ Prerequisites:
 Then:
 
 ```cmd
-git clone https://github.com/<you>/wheelmap.git
-cd wheelmap
+git clone https://github.com/<you>/wheelcraft.git
+cd wheelcraft
 run.bat
 ```
 
@@ -36,12 +36,12 @@ dependencies. After that it just starts the server and opens the browser at
 - **Button remap matrix** mapping each physical XInput button to a virtual one.
 - **Profiles**: dropdown + save/new/delete. Edits apply live (no save needed
   to test); save persists to disk. Profiles live in
-  `%APPDATA%\wheelmap\profiles\` when running the packaged exe, or in
+  `%APPDATA%\wheelcraft\profiles\` when running the packaged exe, or in
   `./profiles/` when running from source.
 
 ## In-game setup
 
-When wheelmap is running you'll have **two** XInput controllers visible to
+When wheelcraft is running you'll have **two** XInput controllers visible to
 games: slot 1 = your real wheel, slot 2 = the virtual pad with your profile
 applied. Pick **Controller 2** in your game's controller settings, or the wheel
 will bypass your tuning.
@@ -58,14 +58,14 @@ installs Python + ViGEmBus, then runs `run.bat`.
 Build a Windows installer that bundles everything:
 
 ```cmd
-build.bat                         REM creates dist\wheelmap\
+build.bat                         REM creates dist\wheelcraft\
 cd installer
 fetch_vendor.bat                  REM downloads ViGEmBus into vendor\
-REM Open wheelmap.iss in Inno Setup and Compile
-REM Output: installer\Output\wheelmap-setup.exe
+REM Open wheelcraft.iss in Inno Setup and Compile
+REM Output: installer\Output\wheelcraft-setup.exe
 ```
 
-Recipient runs `wheelmap-setup.exe` → it installs wheelmap, installs ViGEmBus
+Recipient runs `wheelcraft-setup.exe` → it installs wheelcraft, installs ViGEmBus
 if needed, creates shortcuts. One click.
 
 ## Architecture
