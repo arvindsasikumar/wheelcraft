@@ -4,6 +4,8 @@ import asyncio
 import logging
 import os
 import sys
+import threading
+import webbrowser
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -14,6 +16,10 @@ from fastapi.staticfiles import StaticFiles
 from wheelmap.pipeline import WheelPipeline
 from wheelmap.profile import Profile
 from wheelmap.store import ProfileStore, safe_name
+
+
+PORT = 8765
+URL = f"http://localhost:{PORT}"
 
 
 if getattr(sys, "frozen", False):
@@ -34,6 +40,9 @@ pipeline = WheelPipeline(profile=store.load(_active_name))
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     pipeline.start()
+    if os.environ.get("WHEELCRAFT_NO_BROWSER") != "1":
+        # Tiny delay so uvicorn finishes binding before the browser hits the URL.
+        threading.Timer(0.8, lambda: webbrowser.open(URL)).start()
     yield
     pipeline.stop()
 
@@ -119,7 +128,7 @@ def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     import uvicorn
 
-    uvicorn.run(app, host="127.0.0.1", port=8765, log_level="warning")
+    uvicorn.run(app, host="127.0.0.1", port=PORT, log_level="warning")
     return 0
 
 

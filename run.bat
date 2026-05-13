@@ -26,11 +26,8 @@ if not exist ".venv\Scripts\python.exe" (
     echo.
 )
 
-echo Starting wheelmap on http://localhost:8765
-echo Press Ctrl+C in this window to stop.
+echo Starting wheelcraft on http://localhost:8765
+echo The browser will open automatically. Ctrl+C in this window to stop.
 echo.
-
-REM Open browser after a 2s grace period so the server is ready
-start "" /B cmd /c "timeout /t 2 /nobreak >nul && start http://localhost:8765"
 
 .venv\Scripts\python.exe server.py
