@@ -28,7 +28,7 @@ echo Running PyInstaller...
 .venv\Scripts\pyinstaller.exe ^
     --name wheelmap ^
     --onedir ^
-    --console ^
+    --windowed ^
     --add-data "static;static" ^
     --collect-all vgamepad ^
     %EXTRA% ^

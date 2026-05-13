@@ -373,6 +373,17 @@ async function init() {
     await api("DELETE", `/profiles/${encodeURIComponent(name)}`);
     await loadProfiles();
   });
+  $("btn-quit").addEventListener("click", async () => {
+    if (!confirm("Stop wheelcraft? The server will exit and this page will stop working.")) return;
+    try { await api("POST", "/shutdown"); } catch (e) { /* connection will drop */ }
+    setTimeout(() => {
+      document.body.innerHTML =
+        '<div style="text-align:center;margin-top:25vh;font:14px system-ui;color:#8a93a0;">' +
+        '<h1 style="color:#e6e8eb;font-weight:600;">wheelcraft stopped</h1>' +
+        '<p>You can close this tab. To restart, launch wheelcraft from the Start menu or your desktop shortcut.</p>' +
+        '</div>';
+    }, 400);
+  });
   $("btn-remap-reset").addEventListener("click", () => {
     for (const b of state.allButtons) state.profile.button_remap[b] = b;
     syncRemap();

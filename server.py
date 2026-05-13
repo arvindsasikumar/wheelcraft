@@ -124,11 +124,32 @@ def delete_profile(name: str) -> dict:
     return {"ok": True}
 
 
-def main() -> int:
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    import uvicorn
+@app.post("/api/shutdown")
+def shutdown() -> dict:
+    """Stop the server. Used by the UI's Quit button."""
+    threading.Timer(0.3, lambda: os._exit(0)).start()
+    return {"ok": True}
 
-    uvicorn.run(app, host="127.0.0.1", port=PORT, log_level="warning")
+
+def main() -> int:
+    if getattr(sys, "frozen", False):
+        log_file = PROFILES.parent / "wheelcraft.log"
+        log_file.parent.mkdir(parents=True, exist_ok=True)
+        logging.basicConfig(
+            filename=str(log_file),
+            level=logging.INFO,
+            format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+        )
+    else:
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+    try:
+        import uvicorn
+
+        uvicorn.run(app, host="127.0.0.1", port=PORT, log_level="warning")
+    except Exception:
+        logging.exception("server crashed")
+        return 1
     return 0
 
 
