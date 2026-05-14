@@ -83,12 +83,47 @@ class WheelPipeline:
         self._profile = profile
 
     def start(self) -> None:
-        slot = self._reader.first_connected_slot()
-        if slot is None:
-            raise RuntimeError("no XInput controller detected; plug in the wheel")
-        self._real_slot = slot
-        self._virtual_slot = self._discover_virtual_slot(exclude=slot)
+        # Locate our own virtual pad by writing a sentinel value to it and
+        # reading XInput slots back. `vgamepad.get_index()` is unreliable
+        # (returns wrong slot in some Windows + ViGEmBus states), and naively
+        # picking first_connected_slot() picks up our own pad and creates a
+        # read/write feedback loop.
+        virtual_slot = self._detect_virtual_slot()
+
+        real_slot = None
+        for i in range(4):
+            if i == virtual_slot:
+                continue
+            if self._reader.read(i) is not None:
+                real_slot = i
+                break
+
+        if real_slot is None:
+            raise RuntimeError("no real XInput controller detected; plug in the wheel")
+
+        self._real_slot = real_slot
+        self._virtual_slot = virtual_slot
         self._thread.start()
+
+    def _detect_virtual_slot(self) -> int | None:
+        """Write a sentinel LX value to our virtual pad, then scan XInput slots
+        to find the one that echoes it back. Reset to neutral after."""
+        SENTINEL = 12345  # arbitrary, unlikely to occur naturally at rest
+        self._pad.left_joystick(x_value=SENTINEL, y_value=0)
+        self._pad.update()
+        time.sleep(0.15)  # let the write propagate to XInput
+
+        detected: int | None = None
+        for i in range(4):
+            s = self._reader.read(i)
+            if s is not None and s.lx == SENTINEL:
+                detected = i
+                break
+
+        # Reset pad to neutral so we don't bleed the sentinel to games
+        self._pad.left_joystick(x_value=0, y_value=0)
+        self._pad.update()
+        return detected
 
     def stop(self) -> None:
         self._stop.set()
